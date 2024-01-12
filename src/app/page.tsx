@@ -16,13 +16,16 @@ import { RecentSales } from '@/components/recent-sales'
 import { Search } from '@/components/search'
 import TeamSwitcher from '@/components/team-switcher'
 import { UserNav } from '@/components/user-nav'
+import { getOverview } from '@/services/get-overview'
 
 export const metadata: Metadata = {
   title: 'Dashboard',
   description: 'Example dashboard app built using the components.',
 }
 
-export default function DashboardPage() {
+export default async function DashboardPage() {
+  const overview = await getOverview()
+
   return (
     <>
       <div className='hidden flex-col md:flex'>
@@ -78,9 +81,11 @@ export default function DashboardPage() {
                     </svg>
                   </CardHeader>
                   <CardContent>
-                    <div className='text-2xl font-bold'>$45,231.89</div>
+                    <div className='text-2xl font-bold'>
+                      {overview.totalRevenue.value}
+                    </div>
                     <p className='text-xs text-muted-foreground'>
-                      +20.1% from last month
+                      {overview.totalRevenue.sub}
                     </p>
                   </CardContent>
                 </Card>
@@ -105,9 +110,11 @@ export default function DashboardPage() {
                     </svg>
                   </CardHeader>
                   <CardContent>
-                    <div className='text-2xl font-bold'>+2350</div>
+                    <div className='text-2xl font-bold'>
+                      {overview.subscriptions.value}
+                    </div>
                     <p className='text-xs text-muted-foreground'>
-                      +180.1% from last month
+                      {overview.subscriptions.sub}
                     </p>
                   </CardContent>
                 </Card>
@@ -129,9 +136,11 @@ export default function DashboardPage() {
                     </svg>
                   </CardHeader>
                   <CardContent>
-                    <div className='text-2xl font-bold'>+12,234</div>
+                    <div className='text-2xl font-bold'>
+                      {overview.sales.value}
+                    </div>
                     <p className='text-xs text-muted-foreground'>
-                      +19% from last month
+                      {overview.sales.sub}
                     </p>
                   </CardContent>
                 </Card>
@@ -154,9 +163,11 @@ export default function DashboardPage() {
                     </svg>
                   </CardHeader>
                   <CardContent>
-                    <div className='text-2xl font-bold'>+573</div>
+                    <div className='text-2xl font-bold'>
+                      {overview.activeNow.value}
+                    </div>
                     <p className='text-xs text-muted-foreground'>
-                      +201 since last hour
+                      {overview.activeNow.sub}
                     </p>
                   </CardContent>
                 </Card>

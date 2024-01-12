@@ -1,6 +1,19 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { AppType } from '@/app/api/[[...route]]/route'
+import { hc, InferResponseType } from 'hono/client'
 
-export function RecentSales() {
+export async function RecentSales() {
+  const client = hc<AppType>('http://localhost:3000/')
+  const url = client.api.sales.$url()
+  const res = await fetch(url, { cache: 'no-store' })
+
+  const $get = client.api.sales.$get
+  type ResType = InferResponseType<typeof $get>
+
+  const json: ResType = await res.json()
+  console.log('fetch data in server side', json)
+  const { data } = json
+
   return (
     <div className='space-y-8'>
       <div className='flex items-center'>
@@ -14,7 +27,7 @@ export function RecentSales() {
             olivia.martin@email.com
           </p>
         </div>
-        <div className='ml-auto font-medium'>+$1,999.00</div>
+        <div className='ml-auto font-medium'>{data.olivia}</div>
       </div>
       <div className='flex items-center'>
         <Avatar className='flex h-9 w-9 items-center justify-center space-y-0 border'>
@@ -25,7 +38,7 @@ export function RecentSales() {
           <p className='text-sm font-medium leading-none'>Jackson Lee</p>
           <p className='text-sm text-muted-foreground'>jackson.lee@email.com</p>
         </div>
-        <div className='ml-auto font-medium'>+$39.00</div>
+        <div className='ml-auto font-medium'>{data.jackson}</div>
       </div>
       <div className='flex items-center'>
         <Avatar className='h-9 w-9'>
@@ -38,7 +51,7 @@ export function RecentSales() {
             isabella.nguyen@email.com
           </p>
         </div>
-        <div className='ml-auto font-medium'>+$299.00</div>
+        <div className='ml-auto font-medium'>{data.isabella}</div>
       </div>
       <div className='flex items-center'>
         <Avatar className='h-9 w-9'>
@@ -49,7 +62,7 @@ export function RecentSales() {
           <p className='text-sm font-medium leading-none'>William Kim</p>
           <p className='text-sm text-muted-foreground'>will@email.com</p>
         </div>
-        <div className='ml-auto font-medium'>+$99.00</div>
+        <div className='ml-auto font-medium'>{data.will}</div>
       </div>
       <div className='flex items-center'>
         <Avatar className='h-9 w-9'>
@@ -60,7 +73,7 @@ export function RecentSales() {
           <p className='text-sm font-medium leading-none'>Sofia Davis</p>
           <p className='text-sm text-muted-foreground'>sofia.davis@email.com</p>
         </div>
-        <div className='ml-auto font-medium'>+$39.00</div>
+        <div className='ml-auto font-medium'>{data.sofia}</div>
       </div>
     </div>
   )
